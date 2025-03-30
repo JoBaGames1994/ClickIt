@@ -10,6 +10,12 @@ public class CounterManager : MonoBehaviour
     private float touchTime = 0f;  // Time the player has held the touch on the screen
     private bool isTouching = false;  // Whether the player is currently touching the screen
     public float touchTimeScoringPoint;
+    void Start()
+    {
+        // Load counter from PlayerPrefs
+        tapCount = PlayerPrefs.GetInt("tapCount", 0);
+        UpdateCounterUI();
+    }
     void Update()
     {
         if (Input.touchCount > 0)
@@ -21,8 +27,8 @@ public class CounterManager : MonoBehaviour
                 // Start the countdown timer when the player first touches the screen
                 isTouching = true;
                 touchTime = 0f;  // Reset the timer
-                tapCount++;
-                tapCountText.text = tapCount.ToString();
+                IncrementCounter();
+                UpdateCounterUI();
             }
 
             if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)  // Player is holding the screen
@@ -35,9 +41,9 @@ public class CounterManager : MonoBehaviour
                     if (touchTime >= touchTimeScoringPoint)  // If 5 seconds have passed
                     {
                         // Increment the counter and reset the timer
-                        tapCount++;
+                        IncrementCounter();
                         touchTime = 0f;  // Reset timer after incrementing the counter
-                        tapCountText.text = tapCount.ToString();  // Update the displayed counter
+                        UpdateCounterUI();
                     }
                 }
             }
@@ -49,5 +55,17 @@ public class CounterManager : MonoBehaviour
                 touchTime = 0f;  // Reset the timer
             }
         }
+    }
+    void IncrementCounter()
+    {
+        tapCount++;
+        PlayerPrefs.SetInt("tapCount", tapCount);  // Save updated counter value
+        PlayerPrefs.Save();  // Ensure the value is saved immediately
+        UpdateCounterUI();
+    }
+
+    void UpdateCounterUI()
+    {
+        tapCountText.text = tapCount.ToString();  // Update the displayed counter
     }
 }
