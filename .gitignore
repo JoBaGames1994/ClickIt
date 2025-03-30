@@ -1,0 +1,14 @@
+# User-specific files
+UserSettings/
+
+# Build results
+Build/
+Builds/
+.vs/
+.idea/
+
+# Unity specific files
+Library/
+Temp/
+Obj/
+Build/
